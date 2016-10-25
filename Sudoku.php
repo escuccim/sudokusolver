@@ -7,15 +7,22 @@ class Sudoku {
 	var $valueArray;
 	var $solutionArray;
 	var $initArray;
+	var $action;
+	var $solved;
 
-	function __construct($data = null){
+	function __construct($action, $data = null){
 		$this->solutionArray = $this->initializeSolutionArray();
 		$this->valueArray = $this->initializeValueArray();
 		$this->initArray = $this->valueArray;
-
+		$this->action = $action;
+		$this->solved = 0;
+		
 		if(isset($data)) {
 			$this->valueArray = $data;
 			$this->initArray = $data;
+		}
+		if(!$this->checkData()){
+			$this->action = 'blank';
 		}
 	}
 
@@ -51,6 +58,7 @@ class Sudoku {
 			// check if solved
 			if($this->checkIfSolved() == 1){
 				//echo "SOLVED on Iteration " . $n . "!<BR>";
+				$this->solved = 1;
 				break;
 			}
 			// if solved break
@@ -327,5 +335,18 @@ class Sudoku {
 			}
 		}
 		return $valueArray;
+	}
+	
+	protected function checkData(){
+		$dataFound = 0;
+		for($row = 0; $row < 9; $row++){
+			for($col = 0; $col < 9; $col++){
+				if($this->valueArray[$row][$col]){
+					$dataFound = 1;
+					break;
+				}
+			}
+		}
+		return $dataFound;
 	}
 }
